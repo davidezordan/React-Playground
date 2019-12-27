@@ -11,7 +11,6 @@ import Spinner from './Spinner';
 const EMPTY_BOOKS = [];
 const SHELF_NONE_ID = 'none';
 
-//TODO: handle throttling
 class SearchBooks extends PureComponent {
     state = { searchTerm: '', isLoading: false, books: EMPTY_BOOKS };
 
