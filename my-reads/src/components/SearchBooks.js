@@ -11,7 +11,6 @@ import Spinner from './Spinner';
 const EMPTY_BOOKS = [];
 const SHELF_NONE_ID = 'none';
 
-//TODO: handle throttling
 class SearchBooks extends PureComponent {
     state = { searchTerm: '', isLoading: false, books: EMPTY_BOOKS };
 
@@ -41,11 +40,8 @@ class SearchBooks extends PureComponent {
             try {
                 const books = await BooksAPI.search(newTerm);
 
-                if (books && books.length > 0) {
-                    const newBooks = books.filter(b => 
-                        b.imageLinks && b.imageLinks.smallThumbnail && b.authors && b.authors.length > 0);
-  
-                  await this.updateBooksShelves(newBooks);
+                if (books && books.length > 0) { 
+                  await this.updateBooksShelves(books);
                 }
             } finally {
                 this.showSpinner(false);
