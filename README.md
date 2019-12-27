@@ -1,4 +1,4 @@
-# React platground
+# React playground
 
  Some applications I wrote using React.
 
