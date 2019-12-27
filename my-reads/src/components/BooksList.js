@@ -6,10 +6,6 @@ import BookShelf from './BookShelf';
 import Spinner from './Spinner';
 import * as BooksAPI from '../api/BooksAPI';
 
-const SHELF_READ = 'read'.toLowerCase();
-const SHELF_WANT_TO_READ = 'wantToRead'.toLowerCase();
-const SHELF_CURRENTLY_READING = 'currentlyReading'.toLowerCase();
-
 class BooksList extends PureComponent {
   state = {
     books: [],
@@ -46,6 +42,12 @@ class BooksList extends PureComponent {
   render() {
     const { isLoading, books } = this.state;
 
+    const shelves = [
+      { title: 'Currently Reading', key: 'currentlyReading' },
+      { title: 'Want To Read', key: 'wantToRead' },
+      { title: 'Read', key: 'read' },
+    ];
+
     return (
       isLoading ? <Spinner /> :
 
@@ -63,15 +65,11 @@ class BooksList extends PureComponent {
           </div>
 
           <div className="list-books-content">
-            <BookShelf 
-                books={books.filter((b) => b.shelf.toLowerCase().trim() === SHELF_CURRENTLY_READING)} 
-                title="Currently Reading" onChangeShelf={this.onChangeShelf} />
-            <BookShelf 
-                books={books.filter((b) => b.shelf.toLowerCase().trim() === SHELF_WANT_TO_READ)} 
-                title="Want to Read" onChangeShelf={this.onChangeShelf} />
-            <BookShelf 
-                books={books.filter((b) => b.shelf.toLowerCase().trim() === SHELF_READ)} 
-                title="Read" onChangeShelf={this.onChangeShelf} />
+            {shelves.map(shelf => (
+              <BookShelf 
+                books={books.filter((book) => book.shelf.trim() === shelf.key)} 
+                title={shelf.title} onChangeShelf={this.onChangeShelf} />
+            ))}
           </div>
         </div>
 

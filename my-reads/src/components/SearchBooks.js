@@ -23,7 +23,7 @@ class SearchBooks extends PureComponent {
         try {
             await onChangeShelf(event, book);
             this.setState( { books: books.map(b => 
-                                b.id === book.id ? Object.assign({}, b, { shelf : shelf }) : b)});    
+                b.id === book.id ? Object.assign({}, b, { shelf : shelf }) : b)});    
         } finally {
             this.showSpinner(false);
         }

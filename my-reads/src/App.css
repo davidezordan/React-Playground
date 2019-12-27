@@ -12,6 +12,11 @@ body, .app {
 
 /* main page */
 
+.invalid-route {
+  text-align: center;
+  margin-top: 25px;
+}
+
 .spinner {
   height: 100%;
 }

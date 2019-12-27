@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
+import InvalidRoute from './components/InvalidRoute';
 import BooksList from './components/BooksList';
 import SearchBooks from './components/SearchBooks';
 import * as BooksAPI from './api/BooksAPI';
@@ -16,14 +17,21 @@ class App extends PureComponent {
     
     return (
       <div className="app">
-          <Route exact path='/' render={() => (
-            <BooksList
-              onChangeShelf={this.onChangeShelf}
-            />
-          )} />
-          <Route path='/search' render={() => (
-            <SearchBooks onChangeShelf={this.onChangeShelf}/>
-          )} />
+          <Switch>
+
+            <Route exact path='/' render={() => (
+              <BooksList
+                onChangeShelf={this.onChangeShelf}
+              />
+            )} />
+
+            <Route path='/search' render={() => (
+              <SearchBooks onChangeShelf={this.onChangeShelf}/>
+            )} />
+
+            <Route component={InvalidRoute} />
+
+          </Switch>
       </div>
     );
   }
