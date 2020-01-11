@@ -13,3 +13,6 @@ To get started developing right away:
 
 * install all project dependencies with `npm install`
 * start the development server with `npm start`
+
+## Starter project
+[Starter project](https://github.com/udacity/reactnd-project-would-you-rather-starter)
