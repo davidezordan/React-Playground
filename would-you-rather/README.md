@@ -15,5 +15,5 @@ To get started developing right away:
 * start the development server with `npm start`
 
 ## References
-[Starter project](https://github.com/udacity/reactnd-project-would-you-rather-starter)
-[React Redux todo goals app](https://github.com/udacity/reactnd-redux-todos-goals)
+- [Starter project](https://github.com/udacity/reactnd-project-would-you-rather-starter)
+- [React Redux todo goals app](https://github.com/udacity/reactnd-redux-todos-goals)
