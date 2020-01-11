@@ -17,3 +17,4 @@ To get started developing right away:
 ## References
 - [Starter project](https://github.com/udacity/reactnd-project-would-you-rather-starter)
 - [React Redux todo goals app](https://github.com/udacity/reactnd-redux-todos-goals)
+- [React Nanodegree twitter app](https://github.com/udacity/reactnd-chirper-app)
