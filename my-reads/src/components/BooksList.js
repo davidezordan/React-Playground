@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
@@ -6,77 +6,78 @@ import BookShelf from './BookShelf';
 import Spinner from './Spinner';
 import * as BooksAPI from '../api/BooksAPI';
 
-class BooksList extends PureComponent {
-  state = {
-    books: [],
-    isLoading: false,
+const shelves = [
+  { title: 'Currently Reading', key: 'currentlyReading' },
+  { title: 'Want To Read', key: 'wantToRead' },
+  { title: 'Read', key: 'read' },
+];
+
+const BooksList = ({ onChangeShelf }) => {
+  const [books, setBooks] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const showSpinner = (isSpinnerRequired) => {
+    setIsLoading(isSpinnerRequired);
   };
 
-  onChangeShelf = async (event, book) => {
-    const { onChangeShelf } = this.props;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        showSpinner(true);
+        const newBooks = await BooksAPI.getAll();
+        setBooks(newBooks);
+      } finally {
+        showSpinner(false);
+      }
+    };
 
-    this.showSpinner(true);
+    fetchData();
+  }, []);
+
+  const onChangeShelfEvent = async (event, book) => {
+    showSpinner(true);
     try {
       await onChangeShelf(event, book);
       const modifiedBooks = await BooksAPI.getAll();
-      this.setState({ books: modifiedBooks });
+      setBooks(modifiedBooks);
     } finally {
-      this.showSpinner(false);
+      showSpinner(false);
     }
-  }
+  };
 
-  async componentDidMount() {
-    try {
-      this.showSpinner(true);
-      const books = await BooksAPI.getAll();
-      this.setState({ books: books });
-    } finally {
-      this.showSpinner(false);
-    }
-  }
+  return (
+    isLoading ? <Spinner />
 
-  showSpinner = isSpinnerRequired => {
-    this.setState({ isLoading: isSpinnerRequired });
-  }
+      : (
+        <div>
 
-  render() {
-    const { isLoading, books } = this.state;
+          <Link to="/search">
+            <div className="open-search">
+              <button type="submit">Add a book</button>
+            </div>
+          </Link>
 
-    const shelves = [
-      { title: 'Currently Reading', key: 'currentlyReading' },
-      { title: 'Want To Read', key: 'wantToRead' },
-      { title: 'Read', key: 'read' },
-    ];
+          <div className="list-books">
+            <div className="list-books-title">
+              <h1>MyReads</h1>
+            </div>
 
-    return (
-      isLoading ? <Spinner /> :
-
-      <div>
-
-        <Link to="/search">
-          <div className="open-search">
-            <button type="submit">Add a book</button>
-          </div>
-        </Link>
-
-        <div className="list-books">
-          <div className="list-books-title">
-            <h1>MyReads</h1>
+            <div className="list-books-content">
+              {shelves.map((shelf) => (
+                <BookShelf
+                  books={books.filter((book) => book.shelf.trim() === shelf.key)}
+                  title={shelf.title}
+                  onChangeShelf={onChangeShelfEvent}
+                  key={shelf.key}
+                />
+              ))}
+            </div>
           </div>
 
-          <div className="list-books-content">
-            {shelves.map(shelf => (
-              <BookShelf 
-                books={books.filter((book) => book.shelf.trim() === shelf.key)} 
-                title={shelf.title} onChangeShelf={this.onChangeShelf} />
-            ))}
-          </div>
         </div>
-
-      </div>
-    );
-  }
-}
+      )
+  );
+};
 
 BooksList.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 const InvalidRoute = ({ location }) => (
@@ -13,5 +14,11 @@ No match for
     </Link>
   </div>
 );
+
+InvalidRoute.propTypes = {
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 export default InvalidRoute;
