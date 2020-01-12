@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -15,47 +15,42 @@ import { handleInitialData } from '../actions/shared';
 
 const getRedirectUrl = (pathname) => (pathname === '/logout' ? '/' : pathname);
 
-class NavAuth extends PureComponent {
-  componentDidMount() {
-    const { dispatch } = this.props;
-
+const NavAuth = ({ dispatch, loading, location }) => {
+  useEffect(() => {
     dispatch(handleInitialData());
-  }
+  }, [dispatch]);
 
-  render() {
-    // eslint-disable-next-line react/prop-types
-    const { loading, location } = this.props;
+  const requestedUrl = getRedirectUrl(location.pathname);
 
-    // eslint-disable-next-line react/prop-types
-    const requestedUrl = getRedirectUrl(location.pathname);
-
-    return (
-      <>
-        <Nav />
-        {loading === true
-          ? <Redirect to={`/login?redirectTo=${requestedUrl}`} />
-          : (
-            <div>
-              <Switch>
-                <Route path="/" exact component={QuestionsBoard} />
-                <Route path="/leaderboard" component={LeaderBoard} />
-                <Route path="/add" component={NewQuestion} />
-                <Route path="/questions/:id" component={Questions} />
-                <Route path="/logout" component={Logout} />
-                <Route path="*" component={NoMatch} />
-              </Switch>
-            </div>
-          )}
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <Nav />
+      {loading === true
+        ? <Redirect to={`/login?redirectTo=${requestedUrl}`} />
+        : (
+          <div>
+            <Switch>
+              <Route path="/" exact component={QuestionsBoard} />
+              <Route path="/leaderboard" component={LeaderBoard} />
+              <Route path="/add" component={NewQuestion} />
+              <Route path="/questions/:id" component={Questions} />
+              <Route path="/logout" component={Logout} />
+              <Route path="*" component={NoMatch} />
+            </Switch>
+          </div>
+        )}
+    </>
+  );
+};
 
 const mapStateToProps = ({ authedUser }) => ({ loading: authedUser === null });
 
 NavAuth.propTypes = {
   dispatch: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default connect(mapStateToProps)(NavAuth);
